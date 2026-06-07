@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Экзамен</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Экран PIN -->
+  <div id="pin-overlay">
+    <h1>Введите PIN</h1>
+    <input type="tel" inputmode="numeric" maxlength="4" id="pin-input" placeholder="••••" autocomplete="off">
+    <div class="pin-keypad">
+      <button class="key-btn" data-num="1">1</button>
+      <button class="key-btn" data-num="2">2</button>
+      <button class="key-btn" data-num="3">3</button>
+      <button class="key-btn" data-num="4">4</button>
+      <button class="key-btn" data-num="5">5</button>
+      <button class="key-btn" data-num="6">6</button>
+      <button class="key-btn" data-num="7">7</button>
+      <button class="key-btn" data-num="8">8</button>
+      <button class="key-btn" data-num="9">9</button>
+      <button class="key-btn empty" data-num="0"><span>0</span></button>
+      <button class="key-btn backspace" data-num="back">⌫</button>
+    </div>
+    <p id="pin-error"></p>
+  </div>
+
+  <!-- Выбор темы -->
+  <main id="topic-select" class="hidden" style="text-align: center; padding-top: 40px;">
+    <h1>Выберите тему</h1>
+    <div id="topics-container"></div>
+  </main>
+
+  <!-- Выбор диапазона (Пачки вопросов) -->
+  <main id="range-select" class="hidden" style="text-align: center; padding-top: 40px;">
+    <h1 id="range-title">Тема</h1>
+    <p style="color: var(--text-muted); margin-bottom: 20px;">Выберите пачку вопросов</p>
+    <div id="ranges-container"></div>
+    <button id="back-to-topics-from-range" class="header-btn" style="margin-top: 20px;">← Назад к темам</button>
+  </main>
+
+  <!-- Интерфейс теста -->
+  <header id="quiz-header" class="hidden">
+    <button id="back-to-topics-header-btn" class="header-btn">← Темы</button>
+    
+    <!-- Обертка для кругов (будет скроллиться) -->
+    <div id="circles-wrapper" class="circles-wrapper">
+      <div id="progress-circles" class="progress-circles">
+        <!-- Кружки генерируются JS -->
+      </div>
+    </div>
+
+    <!-- Счетчик (жестко справа) -->
+    <div class="header-actions">
+      <button id="reset-pack-btn" class="icon-btn danger" title="Сбросить эту пачку">🔄</button>
+      <span id="live-stats" class="live-stats">✅ 0 | ❌ 0</span>
+    </div>
+  </header>
+  
+  <main id="quiz-main" class="hidden">
+    <div class="card">
+      <h2 id="question"></h2>
+      <div id="options" class="options"></div>
+      <p id="feedback"></p>
+    </div>
+  </main>
+
+  <!-- Закрепленный футер -->
+  <footer id="quiz-footer" class="hidden">
+    <button id="prev-btn" class="nav-btn" disabled>← Назад</button>
+    <button id="next-btn" class="nav-btn">Далее →</button>
+  </footer>
+
+  <!-- Экран результатов -->
+  <main id="results-screen" class="hidden" style="text-align: center; padding-top: 40px;">
+    <h1>Результаты теста</h1>
+    <div class="results-stats">
+      <p>✅ Правильных: <b id="res-correct">0</b></p>
+      <p>❌ Неправильных: <b id="res-wrong">0</b></p>
+      <p>📝 Всего вопросов: <b id="res-total">0</b></p>
+    </div>
+    <button id="back-to-topics-btn" class="nav-btn topics-btn">К выбору тем</button>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

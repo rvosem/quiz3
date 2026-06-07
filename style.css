@@ -1,0 +1,197 @@
+:root {
+  --bg: #0b1120;
+  --card: #1e293b;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --correct: #22c55e;
+  --wrong: #ef4444;
+  --border: #334155;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hidden { display: none !important; }
+
+/* PIN Overlay */
+#pin-overlay {
+  position: fixed; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; z-index: 50;
+}
+#pin-overlay h1 { margin-bottom: 10px; }
+#pin-input {
+  width: 140px; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius);
+  background: var(--card); color: var(--text); font-size: 2rem; text-align: center;
+  letter-spacing: 10px; font-family: monospace;
+}
+#pin-btn {
+  padding: 16px 24px; border: none; border-radius: var(--radius); background: var(--primary);
+  color: #fff; font-size: 1rem; font-weight: 500; cursor: pointer; touch-action: manipulation;
+}
+#pin-btn:active { opacity: 0.8; }
+#pin-error { color: var(--wrong); min-height: 20px; font-size: 0.9rem; }
+
+/* PIN Keypad */
+.pin-keypad {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 280px; margin-top: 20px;
+}
+.key-btn {
+  padding: 16px; border: none; border-radius: 12px; background: var(--card); color: var(--text);
+  font-size: 1.5rem; font-weight: 600; cursor: pointer; touch-action: manipulation;
+}
+.key-btn:active { background: #334155; }
+.key-btn.empty { visibility: hidden; }
+.key-btn.backspace { background: #334155; font-size: 1.2rem; }
+
+/* Topic Selection */
+#topic-select { padding: 20px 16px; flex: 1; display: flex; flex-direction: column; align-items: center; }
+#topics-container { width: 100%; max-width: 400px; margin-top: 20px; }
+.topic-btn {
+  width: 100%; padding: 18px 20px; margin-bottom: 12px; border: 2px solid var(--border);
+  border-radius: var(--radius); background: var(--card); color: var(--text);
+  font-size: 1rem; font-weight: 500; text-align: left; cursor: pointer; touch-action: manipulation;
+}
+.topic-btn:active { opacity: 0.8; }
+
+/* Range Selection */
+#range-select { padding: 20px 16px; flex: 1; display: flex; flex-direction: column; align-items: center; }
+#ranges-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; }
+.range-btn {
+  width: 100%; padding: 16px; border: 2px solid var(--border); border-radius: var(--radius);
+  background: var(--card); color: var(--text); font-size: 1rem; font-weight: 500;
+  cursor: pointer; touch-action: manipulation;
+}
+.range-btn:active { background: #334155; }
+#back-to-topics-from-range {
+  background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+  padding: 12px 24px; border-radius: var(--radius); cursor: pointer; font-size: 0.9rem;
+}
+
+/* Header - ИСПРАВЛЕНО */
+header {
+  padding: 8px 10px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  gap: 8px; 
+  background: var(--card); 
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10; 
+  height: 56px;
+  overflow: hidden; /* Чтобы скролл был внутри, а не растягивал шапку */
+}
+
+.header-btn {
+  background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+  padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+  cursor: pointer; white-space: nowrap; touch-action: manipulation; 
+  flex-shrink: 0; /* Кнопка не сжимается */
+}
+.header-btn:active { opacity: 0.7; }
+
+/* Обертка для кругов */
+.circles-wrapper {
+  flex: 1; /* Занимает все свободное место */
+  overflow-x: auto; /* Горизонтальный скролл */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  display: flex;
+  align-items: center;
+}
+.circles-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+.progress-circles {
+  display: flex; gap: 6px; align-items: center;
+  width: max-content; /* Чтобы круги не переносились */
+  padding: 0 5px; /* Небольшие отступы по бокам при скролле */
+}
+
+.circle {
+  width: 28px; height: 28px;
+  min-width: 28px; min-height: 28px; 
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; /* Чуть меньше шрифт, чтобы влезали цифры 300+ */
+  font-weight: bold;
+  color: #fff;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  border: 2px solid transparent;
+}
+.circle.future { background: #334155; }
+.circle.active {
+  background: #fff; color: #000; transform: scale(1.15);
+  border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+.circle.correct { background: var(--correct); border-color: var(--correct); }
+.circle.wrong { background: var(--wrong); border-color: var(--wrong); }
+
+.header-actions {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0; /* Счетчик не сжимается */
+}
+.icon-btn {
+  background: transparent; border: 1px solid var(--border); color: var(--text);
+  width: 36px; height: 36px; border-radius: 8px; font-size: 1.1rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  touch-action: manipulation;
+}
+.icon-btn.danger { color: var(--wrong); border-color: var(--wrong); }
+.icon-btn:active { opacity: 0.7; }
+
+.live-stats { font-size: 0.85rem; color: var(--text); white-space: nowrap; font-weight: 500; }
+
+/* Main Quiz Area */
+main#quiz-main { flex: 1; padding: 16px; padding-bottom: 90px; max-width: 640px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+h2 { font-size: 1.2rem; line-height: 1.45; margin-bottom: 18px; }
+.options { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.opt-btn {
+  width: 100%; padding: 16px 18px; border: 2px solid var(--border); border-radius: var(--radius);
+  background: var(--card); color: var(--text); font-size: 1rem; text-align: left;
+  cursor: pointer; touch-action: manipulation;
+}
+.opt-btn.correct { border-color: var(--correct); background: #064e3b; color: #bbf7d0; }
+.opt-btn.wrong { border-color: var(--wrong); background: #450a0a; color: #fecaca; }
+.opt-btn.disabled { pointer-events: none; opacity: 0.7; }
+#feedback { margin-top: 14px; min-height: 24px; font-weight: 500; }
+
+/* Footer Navigation (Fixed Bottom) */
+footer#quiz-footer {
+  position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom)); background: var(--bg);
+  border-top: 1px solid var(--border); display: flex; gap: 10px; z-index: 20;
+}
+.nav-btn {
+  flex: 1; padding: 16px; border: none; border-radius: var(--radius); background: var(--primary);
+  color: #fff; font-size: 1rem; font-weight: 500; cursor: pointer; touch-action: manipulation; height: 52px;
+}
+.nav-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+.nav-btn:active:not(:disabled) { background: var(--primary-hover); }
+
+/* Results Screen */
+#results-screen { padding: 20px 16px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+.results-stats { margin: 24px 0; font-size: 1.2rem; line-height: 2; width: 100%; max-width: 300px; }
+.results-stats p { margin-bottom: 8px; }
+.topics-btn { width: 100%; max-width: 300px; margin-top: 20px; flex-grow: 0; }
+
+/* Mobile Responsive */
+@media (max-width: 360px) {
+  header { gap: 4px; padding: 6px 8px; }
+  .circle { width: 24px; height: 24px; font-size: 0.7rem; min-width: 24px; }
+  h2 { font-size: 1.1rem; }
+  .opt-btn { padding: 14px 16px; font-size: 0.95rem; }
+  .nav-btn { padding: 14px; font-size: 0.95rem; height: 48px; }
+}
